@@ -32,7 +32,7 @@ $settings = new Settings();
                                </h1>
                                <button class="log-url-btn" data-clipboard="<?=htmlspecialchars($log->getURL()->toString()); ?>" title="Copy log URL to clipboard">
                                    <span class="log-url"><?=htmlspecialchars($log->getDisplayURL()); ?></span>
-                                   <i class="fa-solid fa-copy"></i>
+                                   <i class="fa-solid fa-copy fa-fw"></i>
                                </button>
                            </div>
                        </div>
@@ -49,6 +49,13 @@ $settings = new Settings();
                                        <i class="fa fa-arrow-circle-down"></i>
                                        <?=htmlspecialchars($log->getLinesString()); ?>
                                    </div>
+                                   <button type="button"
+                                           class="btn btn-dark btn-small"
+                                           data-clipboard-url="<?=htmlspecialchars($log->getRawURL()->toString()); ?>"
+                                           title="Copy log to clipboard">
+                                       <i class="fa-solid fa-copy fa-fw"></i>
+                                       <span>Copy</span>
+                                   </button>
                                    <a class="btn btn-dark btn-small" id="raw" target="_blank" title="Raw log" href="<?=$log->getRawURL()->toString(); ?>">
                                        <i class="fa fa-arrow-up-right-from-square"></i>
                                        Raw
