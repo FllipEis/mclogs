@@ -30,7 +30,7 @@ $settings = new Settings();
                                    <i class="fas fa-file-lines"></i>
                                    <?=htmlspecialchars($log->getCodexLog()->getTitle()); ?>
                                </h1>
-                               <button class="log-url-btn" data-clipboard="<?=htmlspecialchars($log->getURL()->toString()); ?>" title="Copy log URL to clipboard">
+                               <button class="log-url-btn" id="copy-log-url" data-log-url="<?=htmlspecialchars($log->getURL()->toString()); ?>" title="Copy log URL to clipboard">
                                    <span class="log-url"><?=htmlspecialchars($log->getDisplayURL()); ?></span>
                                    <i class="fa-solid fa-copy fa-fw"></i>
                                </button>
@@ -51,7 +51,8 @@ $settings = new Settings();
                                    </div>
                                    <button type="button"
                                            class="btn btn-dark btn-small"
-                                           data-clipboard-url="<?=htmlspecialchars($log->getRawURL()->toString()); ?>"
+                                           id="copy-log"
+                                           data-raw-url="<?=htmlspecialchars($log->getRawURL()->toString()); ?>"
                                            title="Copy log to clipboard">
                                        <i class="fa-solid fa-copy fa-fw"></i>
                                        <span>Copy</span>
