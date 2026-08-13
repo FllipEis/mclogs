@@ -216,9 +216,9 @@ async function handleCopyButtonClick(e) {
     const button = e.currentTarget;
     try {
         if (button.dataset.clipboardUrl) {
-            await writeUrlToClipboard(button.dataset.clipboardUrl);
+            await copyUrlToClipboard(button.dataset.clipboardUrl);
         } else {
-            await navigator.clipboard.writeText(button.dataset.clipboard);
+            await copyTextToClipboard(button.dataset.clipboard);
         }
         showCopyButtonResult(button, doneClassName, "Copied");
     } catch (error) {
@@ -227,28 +227,22 @@ async function handleCopyButtonClick(e) {
     }
 }
 
-/**
- * Start the clipboard write before the request finishes so browsers that require
- * user activation for clipboard access keep the click associated with the write.
- * @param {string} url
- */
-async function writeUrlToClipboard(url) {
-    const textPromise = fetch(url).then(async response => {
+function copyTextToClipboard(text) {
+    return navigator.clipboard.writeText(text);
+}
+
+function copyUrlToClipboard(url) {
+    const content = fetch(url).then(response => {
         if (!response.ok) {
             throw new Error(`Could not load log: ${response.status} (${response.statusText})`);
         }
-        return response.text();
+        return response.blob();
     });
 
-    if (typeof ClipboardItem !== "undefined" && typeof navigator.clipboard.write === "function") {
-        const item = new ClipboardItem({
-            "text/plain": textPromise.then(text => new Blob([text], {type: "text/plain"}))
-        });
-        await navigator.clipboard.write([item]);
-        return;
-    }
-
-    await navigator.clipboard.writeText(await textPromise);
+    // Pass the pending request to ClipboardItem so Safari sees write() during the click event.
+    return navigator.clipboard.write([
+        new ClipboardItem({"text/plain": content})
+    ]);
 }
 
 function showCopyButtonResult(button, resultClassName, resultLabel) {
